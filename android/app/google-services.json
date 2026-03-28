@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "457593901274",
+    "project_id": "wellness-45198",
+    "storage_bucket": "wellness-45198.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457593901274:android:d8c1267e7690eb4b3795e3",
+        "android_client_info": {
+          "package_name": "com.aloe.wellness.aloe_wellness_coach"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUc_tkscvQENOTJxUcycmTgrTV2QikLEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

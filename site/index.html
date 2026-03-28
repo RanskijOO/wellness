@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aloe Wellness Coach Legal</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4faf5;
+        --surface: rgba(255, 255, 255, 0.92);
+        --text: #133224;
+        --muted: #5d7468;
+        --line: rgba(19, 50, 36, 0.1);
+        --accent: #2f8f60;
+        --accent-soft: #dff3e8;
+        --shadow: 0 18px 48px rgba(40, 84, 61, 0.12);
+        --radius: 24px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(110, 190, 144, 0.22), transparent 32%),
+          linear-gradient(180deg, #f8fcf8 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+
+      main {
+        width: min(920px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 48px 0 72px;
+      }
+
+      .hero,
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        padding: 40px;
+        margin-bottom: 24px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 18px 0 12px;
+        font-size: clamp(32px, 4vw, 48px);
+        line-height: 1.06;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.7;
+      }
+
+      .grid {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+
+      .card {
+        padding: 28px;
+      }
+
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 24px;
+      }
+
+      .card p {
+        margin-bottom: 20px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 20px;
+        border-radius: 16px;
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      footer {
+        margin-top: 28px;
+        padding: 0 8px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <span class="eyebrow">Aloe Wellness Coach</span>
+        <h1>Юридичні документи</h1>
+        <p>
+          Ця сторінка підготовлена для публічного розміщення політики
+          конфіденційності, умов використання та wellness-disclaimer без
+          медичних обіцянок чи лікувальних тверджень.
+        </p>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Політика конфіденційності</h2>
+          <p>
+            Пояснює, які дані збирає застосунок, як вони використовуються, як
+            працюють Supabase, Firebase і сторонні product links.
+          </p>
+          <a class="button" href="./privacy-policy/">Відкрити</a>
+        </article>
+
+        <article class="card">
+          <h2>Умови використання</h2>
+          <p>
+            Описують wellness-позиціонування застосунку, прийнятне використання,
+            обмеження відповідальності та правила зовнішніх посилань.
+          </p>
+          <a class="button" href="./terms/">Відкрити</a>
+        </article>
+      </section>
+
+      <footer>
+        Публікуйте цей каталог на HTTPS-домені або через GitHub Pages / Netlify
+        / Vercel перед store submission.
+      </footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Політика конфіденційності | Aloe Wellness Coach</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4faf5;
+        --surface: rgba(255, 255, 255, 0.94);
+        --text: #163527;
+        --muted: #587064;
+        --line: rgba(22, 53, 39, 0.1);
+        --accent: #2f8f60;
+        --shadow: 0 18px 48px rgba(40, 84, 61, 0.12);
+        --radius: 24px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top right, rgba(110, 190, 144, 0.18), transparent 34%),
+          linear-gradient(180deg, #f8fcf8 0%, var(--bg) 100%);
+      }
+
+      main {
+        width: min(980px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 40px 0 72px;
+      }
+
+      .shell {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 36px;
+      }
+
+      .back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(30px, 4vw, 44px);
+        line-height: 1.08;
+      }
+
+      .lead {
+        margin: 0 0 28px;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.7;
+      }
+
+      section + section {
+        margin-top: 28px;
+        padding-top: 28px;
+        border-top: 1px solid var(--line);
+      }
+
+      h2 {
+        margin: 0 0 12px;
+        font-size: 22px;
+      }
+
+      p,
+      li {
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .meta {
+        display: inline-flex;
+        margin-top: 24px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(47, 143, 96, 0.1);
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <article class="shell">
+        <a class="back" href="../">← До юридичних документів</a>
+        <h1>Політика конфіденційності</h1>
+        <p class="lead">
+          Aloe Wellness Coach є wellness / lifestyle застосунком для підтримки
+          щоденних звичок. Він не є медичним сервісом, не призначений для
+          діагностики, лікування чи профілактики захворювань і не надає
+          медичних порад.
+        </p>
+
+        <section>
+          <h2>1. Які дані ми можемо збирати</h2>
+          <ul>
+            <li>облікові дані, якщо ви створюєте акаунт електронною поштою;</li>
+            <li>
+              профіль wellness-цілей, тривалість плану, reminder settings і
+              обрані вподобання;
+            </li>
+            <li>
+              записи про воду, сон, вагу, настрій, нотатки та виконання плану;
+            </li>
+            <li>
+              технічні події на кшталт outbound clicks, crash/debug logs і
+              базових analytics hooks;
+            </li>
+            <li>
+              локальні дані пристрою, потрібні для нагадувань і безпечного
+              збереження сесії.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>2. Як використовуються дані</h2>
+          <ul>
+            <li>для створення персоналізованої wellness-рутини;</li>
+            <li>для відображення трекерів і прогресу в застосунку;</li>
+            <li>для роботи нагадувань і збереження ваших налаштувань;</li>
+            <li>
+              для покращення стабільності сервісу, безпеки та якості роботи
+              застосунку.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>3. Інфраструктурні сервіси</h2>
+          <p>
+            Для технічної роботи сервісу можуть використовуватися Supabase,
+            Firebase Cloud Messaging, захищене локальне сховище на пристрої та
+            інші стандартні інфраструктурні провайдери. Ми не продаємо ваші
+            персональні дані.
+          </p>
+        </section>
+
+        <section>
+          <h2>4. Зовнішні product links</h2>
+          <p>
+            Деякі кнопки відкривають зовнішні сторінки продуктів або магазину.
+            Після переходу на сторонній сайт застосовуються його власні privacy
+            policy, cookies та checkout rules. Рекомендуємо ознайомитися з ними
+            окремо.
+          </p>
+        </section>
+
+        <section>
+          <h2>5. Ваш контроль над даними</h2>
+          <p>
+            Ви можете змінювати свої записи, редагувати профіль, виходити з
+            акаунта, використовувати гостьовий режим або звернутися на
+            підтримку щодо privacy-запитів. Якщо для production release у вас
+            доступне створення акаунта, перед App Store submission також
+            перевірте наявність in-app account deletion.
+          </p>
+        </section>
+
+        <section>
+          <h2>6. Контакти</h2>
+          <p>
+            Для privacy та support-запитів: support@aloewellnesscoach.app
+          </p>
+        </section>
+
+        <div class="meta">Останнє оновлення: 28 березня 2026</div>
+      </article>
+    </main>
+  </body>
+</html>
