@@ -1,5 +1,19 @@
 # Screenshot Plan
 
+## Final Google Play Package
+
+- Feature graphic: [feature_graphic_1024x500.png](/D:/wellness/docs/release/assets/google_play/feature_graphic_1024x500.png)
+- Phone screenshot: [phone_01_dashboard_focus_1242x2208.png](/D:/wellness/docs/release/assets/google_play/phone_01_dashboard_focus_1242x2208.png)
+- Phone screenshot: [phone_02_plan_structure_1242x2208.png](/D:/wellness/docs/release/assets/google_play/phone_02_plan_structure_1242x2208.png)
+- Phone screenshot: [phone_03_catalog_1242x2208.png](/D:/wellness/docs/release/assets/google_play/phone_03_catalog_1242x2208.png)
+- Phone screenshot: [phone_04_shop_links_1242x2208.png](/D:/wellness/docs/release/assets/google_play/phone_04_shop_links_1242x2208.png)
+
+## Regeneration
+
+- Source screenshots: `C:\Users\ransk\Downloads\Phone Link\Screenshot_*.jpg`
+- Generator: [generate_play_assets.py](/D:/wellness/scripts/generate_play_assets.py)
+- Output manifest: [manifest.md](/D:/wellness/docs/release/assets/google_play/manifest.md)
+
 ## iPhone / Android Primary Set
 
 1. Onboarding hero
