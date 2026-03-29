@@ -50,6 +50,7 @@
 - Finalize screenshots
 - Finalize App Store and Google Play metadata
 - Publish privacy policy at a public HTTPS URL
+- Publish account deletion request page at a public HTTPS URL if account creation remains enabled
 - Publish the static `site/privacy-policy/` page or equivalent hosted policy before submitting
 - Complete App Store privacy disclosures
 - Complete Google Play Data safety form

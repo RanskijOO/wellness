@@ -21,6 +21,7 @@ Production-oriented Flutter mobile app for iOS and Android focused on wellness r
 - 7 / 14 / 21-day wellness programs with checklist-based adherence
 - Trackers for water, sleep, weight, mood, notes, and streaks
 - Product catalog with category filters, search, external/shop-ready links, and in-app webview support
+- Live Ukrainian Aloe Hub storefront used as the product source of truth, with the provided PDF used only to enrich matched items with stronger metadata
 - Profile, reminder time editing, theme settings, privacy policy, terms, disclaimer, and support
 - Friendly loading, retry, empty, and offline-aware states across the core surfaces
 
@@ -140,6 +141,20 @@ Use real project credentials and native config files before release:
 
 Detailed notes: [docs/setup/firebase_setup.md](/D:/wellness/docs/setup/firebase_setup.md)
 
+### 7. Android Release Signing
+
+The Android release build now supports a dedicated upload key through:
+
+- `android/key.properties`
+- `android/upload-keystore.jks`
+- `android/key.properties.example`
+
+Notes:
+
+- `android/key.properties` and `android/upload-keystore.jks` are gitignored and should not be committed.
+- Keep a secure backup of the upload keystore and its passwords.
+- If `android/key.properties` is missing, the repo can still fall back to debug signing locally, but that is not acceptable for Google Play submission.
+
 ## Quality Commands
 
 ```bash
@@ -177,7 +192,8 @@ Notes:
 
 ## Deployment Notes
 
-- Replace default Forever URLs with the exact distributor/shop URLs you plan to monetize
+- Default shop links now point to the Ukrainian Aloe Hub storefront at `https://aloe-hub.flpuretail.com/uk/`
+- If you use another distributor storefront, replace `SHOP_BASE_URL` and refresh the catalog URL mapping before release
 - Add brand-final app icon and launch assets before store submission
 - Configure Supabase RLS review, backups, and environment separation
 - Connect Firebase FCM/APNs certificates before push release
@@ -187,6 +203,8 @@ Notes:
 - [Production TODO](/D:/wellness/docs/production_todo.md)
 - [App Store Metadata](/D:/wellness/docs/release/app_store_metadata.md)
 - [Google Play Metadata](/D:/wellness/docs/release/google_play_metadata.md)
+- [Google Play Data Safety Draft](/D:/wellness/docs/release/google_play_data_safety.md)
+- [Google Play Health Declaration Draft](/D:/wellness/docs/release/google_play_health_declaration.md)
 - [Screenshot Plan](/D:/wellness/docs/release/screenshot_plan.md)
 - [Release Checklist](/D:/wellness/docs/release/release_checklist.md)
 - [Privacy Policy Template](/D:/wellness/docs/legal/privacy_policy_template.md)

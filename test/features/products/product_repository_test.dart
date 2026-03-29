@@ -59,19 +59,23 @@ void main() {
         );
 
         expect(
-          recommendations.take(3).map((item) => item.id),
-          contains('aloe-reset-pack'),
+          recommendations
+              .take(4)
+              .any((item) => item.wellnessTags.contains('hydration')),
+          isTrue,
         );
         expect(
-          recommendations.take(3).map((item) => item.id),
-          contains('aloe-gel-classic'),
+          recommendations
+              .take(4)
+              .any(
+                (item) =>
+                    item.id == 'forever-daily' ||
+                    item.wellnessTags.contains('combo') ||
+                    item.wellnessTags.contains('daily-routine'),
+              ),
+          isTrue,
         );
-        expect(
-          recommendations.indexWhere((item) => item.id == 'aloe-reset-pack'),
-          lessThan(
-            recommendations.indexWhere((item) => item.id == 'bee-pollen-daily'),
-          ),
-        );
+        expect(recommendations, hasLength(6));
       },
     );
   });

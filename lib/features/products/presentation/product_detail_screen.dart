@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/design_system/app_tokens.dart';
+import '../../../core/utils/shop_link_resolver.dart';
 import '../../../core/widgets/app_components.dart';
 import '../domain/product_models.dart';
 
@@ -32,9 +33,10 @@ class ProductDetailScreen extends ConsumerWidget {
       );
     }
 
-    final String targetUrl = product.externalProductUrl.isEmpty
-        ? state!.remoteConfig.shopBaseUrl
-        : product.externalProductUrl;
+    final String targetUrl = resolveProductDestinationUrl(
+      productUrl: product.externalProductUrl,
+      shopBaseUrl: state!.remoteConfig.shopBaseUrl,
+    );
     final Uri? targetUri = Uri.tryParse(targetUrl);
     final bool canOpenTarget = targetUri != null && targetUri.hasScheme;
 

@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 
+import '../utils/shop_link_resolver.dart';
+
 class AppEnvironment {
   const AppEnvironment({
     required this.environmentName,
@@ -97,11 +99,13 @@ class AppEnvironment {
       enableFirebase: _readBool(values['ENABLE_FIREBASE'], fallback: false),
       supabaseUrl: values['SUPABASE_URL'] ?? '',
       supabaseAnonKey: values['SUPABASE_ANON_KEY'] ?? '',
-      shopBaseUrl: values['SHOP_BASE_URL'] ?? 'https://www.foreverliving.com/',
-      supportEmail: values['SUPPORT_EMAIL'] ?? 'support@aloewellnesscoach.app',
+      shopBaseUrl: normalizeShopBaseUrl(
+        values['SHOP_BASE_URL'] ?? defaultShopBaseUrl,
+      ),
+      supportEmail: values['SUPPORT_EMAIL'] ?? 'ranskijoo@gmail.com',
       highlightMessage:
           values['HIGHLIGHT_MESSAGE'] ??
-          'Рухайтесь у власному темпі: вода, сон і м’яка щоденна послідовність.',
+          'Рухайтесь у власному темпі: вода, сон і спокійний щоденний ритм.',
       firebaseApiKey: values['FIREBASE_API_KEY'] ?? '',
       firebaseAndroidAppId: values['FIREBASE_ANDROID_APP_ID'] ?? '',
       firebaseIosAppId: values['FIREBASE_IOS_APP_ID'] ?? '',

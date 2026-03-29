@@ -63,7 +63,7 @@ const String privacyPolicyTemplate = '''
 Застосунок не є медичним сервісом. Уся інформація, поради, плани та підказки щодо продуктів надаються лише як загальна wellness-підтримка.
 
 ## 10. Контакти
-З питань конфіденційності та реалізації прав щодо даних звертайтесь: support@aloewellnesscoach.app
+З питань конфіденційності та реалізації прав щодо даних звертайтесь: ranskijoo@gmail.com
 ''';
 
 const String termsTemplate = '''
@@ -106,11 +106,11 @@ const String termsTemplate = '''
 Використання сервісу також регулюється Політикою конфіденційності та записами вашої згоди на дисклеймер, політику конфіденційності та умови використання.
 
 ## 11. Контакти
-Із юридичних, privacy або support-питань звертайтесь: support@aloewellnesscoach.app
+Із юридичних, privacy або support-питань звертайтесь: ranskijoo@gmail.com
 ''';
 
 const String supportTemplate = '''
-Підтримка: support@aloewellnesscoach.app
+Підтримка: ranskijoo@gmail.com
 
 Рекомендований формат звернення:
 - коротко опишіть ситуацію

@@ -8,6 +8,9 @@ import '../../../core/widgets/app_components.dart';
 import '../../goals/domain/wellness_goal.dart';
 import '../domain/profile_models.dart';
 
+const String _accountDeletionUrl =
+    'https://ranskijoo.github.io/wellness/account-deletion/';
+
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -224,6 +227,14 @@ class ProfileScreen extends ConsumerWidget {
                         title: 'Умови використання',
                         icon: Icons.description_outlined,
                         onTap: () => context.push('/legal/terms'),
+                      ),
+                      _ProfileAction(
+                        title: 'Запит на видалення акаунта',
+                        icon: Icons.person_remove_outlined,
+                        onTap: () => ref
+                            .read(appServicesProvider)
+                            .externalLinks
+                            .open(_accountDeletionUrl),
                       ),
                       _ProfileAction(
                         title: 'Підтримка',

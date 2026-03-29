@@ -23,7 +23,7 @@ The app helps users:
 
 - Guest mode is available for review of the main product flow.
 - Legal screens are accessible before sign-in through onboarding and authentication flows.
-- If a signed-in review build is required, provide a live demo account here:
+- If a signed-in review build is required, replace the optional demo account fields below before submission:
   - Email: `[demo-review@example.com]`
   - Password: `[replace-before-submission]`
 
@@ -44,7 +44,9 @@ The app helps users:
 - Optional account: email-based authentication for sync
 - Guest mode: supported
 - Tracked data: wellness profile, daily logs, reminder settings, consent records, outbound clicks, minimal diagnostics/analytics
-- Privacy policy URL: `[insert-public-url]`
+- Privacy policy URL: `https://ranskijoo.github.io/wellness/privacy-policy/`
+- Account deletion URL: `https://ranskijoo.github.io/wellness/account-deletion/`
+- Support email: `ranskijoo@gmail.com`
 
 ## Notifications
 

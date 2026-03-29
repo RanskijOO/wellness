@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../app/providers.dart';
 import '../../../core/design_system/app_tokens.dart';
 import '../../../core/widgets/app_components.dart';
 
-class ProductWebviewScreen extends StatefulWidget {
+bool shouldShowWebViewErrorOverlay(bool? isForMainFrame) =>
+    isForMainFrame ?? true;
+
+class ProductWebviewScreen extends ConsumerStatefulWidget {
   const ProductWebviewScreen({
     required this.title,
     required this.url,
@@ -15,13 +20,16 @@ class ProductWebviewScreen extends StatefulWidget {
   final String url;
 
   @override
-  State<ProductWebviewScreen> createState() => _ProductWebviewScreenState();
+  ConsumerState<ProductWebviewScreen> createState() =>
+      _ProductWebviewScreenState();
 }
 
-class _ProductWebviewScreenState extends State<ProductWebviewScreen> {
+class _ProductWebviewScreenState extends ConsumerState<ProductWebviewScreen> {
   WebViewController? _controller;
   bool _isLoading = true;
   bool _hasError = false;
+  bool _canGoBack = false;
+  bool _canGoForward = false;
   Uri? _targetUri;
 
   @override
@@ -42,20 +50,104 @@ class _ProductWebviewScreenState extends State<ProductWebviewScreen> {
             _isLoading = true;
             _hasError = false;
           }),
-          onPageFinished: (_) => setState(() => _isLoading = false),
-          onWebResourceError: (_) => setState(() {
-            _isLoading = false;
-            _hasError = true;
-          }),
+          onPageFinished: (_) async {
+            if (!mounted) {
+              return;
+            }
+            setState(() => _isLoading = false);
+            await _refreshNavigationState();
+          },
+          onWebResourceError: (WebResourceError error) {
+            if (!shouldShowWebViewErrorOverlay(error.isForMainFrame)) {
+              return;
+            }
+            setState(() {
+              _isLoading = false;
+              _hasError = true;
+            });
+          },
         ),
       )
       ..loadRequest(_targetUri!);
   }
 
+  Future<void> _refreshNavigationState() async {
+    final WebViewController? controller = _controller;
+    if (controller == null || !mounted) {
+      return;
+    }
+
+    final bool canBack = await controller.canGoBack();
+    final bool canForward = await controller.canGoForward();
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _canGoBack = canBack;
+      _canGoForward = canForward;
+    });
+  }
+
+  Future<void> _openInBrowser() async {
+    try {
+      await ref.read(appServicesProvider).externalLinks.open(widget.url);
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Не вдалося відкрити сторінку у зовнішньому браузері.'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+            tooltip: 'Назад',
+            onPressed: _canGoBack
+                ? () async {
+                    await _controller?.goBack();
+                    await _refreshNavigationState();
+                  }
+                : null,
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          ),
+          IconButton(
+            tooltip: 'Вперед',
+            onPressed: _canGoForward
+                ? () async {
+                    await _controller?.goForward();
+                    await _refreshNavigationState();
+                  }
+                : null,
+            icon: const Icon(Icons.arrow_forward_ios_rounded),
+          ),
+          IconButton(
+            tooltip: 'Оновити',
+            onPressed: _controller == null
+                ? null
+                : () async {
+                    setState(() => _isLoading = true);
+                    await _controller?.reload();
+                  },
+            icon: const Icon(Icons.refresh_rounded),
+          ),
+          IconButton(
+            tooltip: 'Відкрити в браузері',
+            onPressed: widget.url.isEmpty ? null : _openInBrowser,
+            icon: const Icon(Icons.open_in_browser_rounded),
+          ),
+        ],
+      ),
       body: widget.url.isEmpty || _controller == null
           ? const AloePageBackground(
               child: Center(
@@ -88,6 +180,13 @@ class _ProductWebviewScreenState extends State<ProductWebviewScreen> {
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: AloeSpacing.lg),
+                            FilledButton.tonal(
+                              onPressed: widget.url.isEmpty
+                                  ? null
+                                  : _openInBrowser,
+                              child: const Text('Відкрити в браузері'),
+                            ),
+                            const SizedBox(height: AloeSpacing.sm),
                             FilledButton(
                               onPressed: () {
                                 if (_targetUri != null) {

@@ -32,6 +32,7 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+.tooling/
 .tooling/flutter/
 .tooling/flutter_windows_*.zip
 
@@ -45,3 +46,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/key.properties
+/android/key.properties.example.local
+/android/upload-keystore.jks

@@ -4,9 +4,23 @@ import 'package:uuid/uuid.dart';
 
 import '../../../core/config/app_environment.dart';
 import '../../../core/content/seed_catalog.dart';
+import '../../../core/utils/shop_link_resolver.dart';
 import '../../goals/domain/wellness_goal.dart';
 import '../../onboarding/domain/onboarding_models.dart';
 import '../domain/profile_models.dart';
+
+const String _legacyHighlightMessage =
+    'Рухайтесь у власному темпі: вода, сон і м’яка щоденна послідовність.';
+const String _defaultHighlightMessage =
+    'Рухайтесь у власному темпі: вода, сон і спокійний щоденний ритм.';
+
+String _normalizeHighlightMessage(String? value) {
+  final String normalized = value?.trim() ?? '';
+  if (normalized.isEmpty || normalized == _legacyHighlightMessage) {
+    return _defaultHighlightMessage;
+  }
+  return normalized;
+}
 
 class ProfileRepository {
   ProfileRepository({
@@ -29,7 +43,9 @@ class ProfileRepository {
       shopBaseUrl: _environment.shopBaseUrl,
       supportEmail: _environment.supportEmail,
       enableAiCoach: false,
-      highlightMessage: _environment.highlightMessage,
+      highlightMessage: _normalizeHighlightMessage(
+        _environment.highlightMessage,
+      ),
     );
 
     if (_supabaseClient == null) {
@@ -49,13 +65,16 @@ class ProfileRepository {
       }
 
       config = config.copyWith(
-        shopBaseUrl: values['shop_base_url']?.toString() ?? config.shopBaseUrl,
+        shopBaseUrl: normalizeShopBaseUrl(
+          values['shop_base_url']?.toString() ?? config.shopBaseUrl,
+        ),
         supportEmail:
             values['support_email']?.toString() ?? config.supportEmail,
         enableAiCoach:
             values['enable_ai_coach'] as bool? ?? config.enableAiCoach,
-        highlightMessage:
-            values['highlight_message']?.toString() ?? config.highlightMessage,
+        highlightMessage: _normalizeHighlightMessage(
+          values['highlight_message']?.toString() ?? config.highlightMessage,
+        ),
       );
     } catch (_) {
       return config;

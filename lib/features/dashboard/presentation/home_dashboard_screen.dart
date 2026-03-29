@@ -7,6 +7,7 @@ import '../../../core/design_system/app_tokens.dart';
 import '../../../core/widgets/app_components.dart';
 import '../../plans/domain/plan_models.dart';
 import '../../products/domain/product_models.dart';
+import '../../products/presentation/shop_entry_card.dart';
 
 class HomeDashboardScreen extends ConsumerWidget {
   const HomeDashboardScreen({super.key});
@@ -73,16 +74,27 @@ class HomeDashboardScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                  GradientHero(
-                    eyebrow: 'Сьогодні',
-                    title:
-                        'День ${state.currentPlanDayNumber} із ${dashboard.activePlan.durationDays}',
-                    subtitle: dashboard.highlightMessage,
-                    trailing: WaterRing(
-                      progress: waterProgress,
-                      valueLabel: '${dashboard.todaysLog.waterMl} мл',
-                      caption: 'з ${dashboard.profile.hydrationTargetMl} мл',
-                    ),
+                  LayoutBuilder(
+                    builder: (BuildContext context, BoxConstraints constraints) {
+                      final double textScale = MediaQuery.textScalerOf(
+                        context,
+                      ).scale(1);
+                      final bool compactHero =
+                          constraints.maxWidth < 420 || textScale > 1.05;
+
+                      return GradientHero(
+                        eyebrow: 'Сьогодні',
+                        title:
+                            'День ${state.currentPlanDayNumber} із ${dashboard.activePlan.durationDays}',
+                        subtitle: dashboard.highlightMessage,
+                        trailing: WaterRing(
+                          progress: waterProgress,
+                          valueLabel: '${dashboard.todaysLog.waterMl} мл',
+                          caption: 'з ${dashboard.profile.hydrationTargetMl} мл',
+                          size: compactHero ? 136 : 158,
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: AloeSpacing.xl),
                   Wrap(
@@ -150,6 +162,26 @@ class HomeDashboardScreen extends ConsumerWidget {
                           ],
                         ),
                       ],
+                    ),
+                  ),
+                  const SizedBox(height: AloeSpacing.xl),
+                  ShopEntryCard(
+                    url: state.remoteConfig.shopBaseUrl,
+                    title: 'Відкрити весь Aloe Hub shop',
+                    subtitle:
+                        'Повний сайт магазину доступний і в застосунку, і в зовнішньому браузері.',
+                    onOpenInApp: () => openShopInApp(
+                      context: context,
+                      ref: ref,
+                      url: state.remoteConfig.shopBaseUrl,
+                      title: 'Aloe Hub Shop',
+                      source: 'dashboard_shop_card',
+                    ),
+                    onOpenInBrowser: () => openShopInBrowser(
+                      context: context,
+                      ref: ref,
+                      url: state.remoteConfig.shopBaseUrl,
+                      source: 'dashboard_shop_card',
                     ),
                   ),
                   const SizedBox(height: AloeSpacing.xl),

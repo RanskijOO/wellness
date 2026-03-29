@@ -6,6 +6,7 @@ import '../../../app/providers.dart';
 import '../../../core/design_system/app_tokens.dart';
 import '../../../core/widgets/app_components.dart';
 import '../domain/product_models.dart';
+import 'shop_entry_card.dart';
 
 class ProductsScreen extends ConsumerStatefulWidget {
   const ProductsScreen({super.key});
@@ -55,7 +56,14 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
 
           return AloePageBackground(
             child: ListView(
-              padding: const EdgeInsets.all(AloeSpacing.xl),
+              padding: EdgeInsets.fromLTRB(
+                AloeSpacing.xl,
+                AloeSpacing.xl,
+                AloeSpacing.xl,
+                AloeSpacing.xxl +
+                    MediaQuery.paddingOf(context).bottom +
+                    110,
+              ),
               children: <Widget>[
                 GradientHero(
                   eyebrow: 'Каталог',
@@ -66,6 +74,26 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
                     icon: Icons.local_florist_outlined,
                     size: 74,
                     circular: true,
+                  ),
+                ),
+                const SizedBox(height: AloeSpacing.xl),
+                ShopEntryCard(
+                  url: state.remoteConfig.shopBaseUrl,
+                  title: 'Офіційний shop Aloe Hub',
+                  subtitle:
+                      'Відкрийте aloe-hub.flpuretail.com прямо в застосунку або перейдіть у зовнішній браузер.',
+                  onOpenInApp: () => openShopInApp(
+                    context: context,
+                    ref: ref,
+                    url: state.remoteConfig.shopBaseUrl,
+                    title: 'Aloe Hub Shop',
+                    source: 'catalog_shop_card',
+                  ),
+                  onOpenInBrowser: () => openShopInBrowser(
+                    context: context,
+                    ref: ref,
+                    url: state.remoteConfig.shopBaseUrl,
+                    source: 'catalog_shop_card',
                   ),
                 ),
                 const SizedBox(height: AloeSpacing.xl),

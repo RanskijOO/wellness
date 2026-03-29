@@ -2,11 +2,11 @@ import 'package:aloe_wellness_coach/app/providers.dart';
 import 'package:aloe_wellness_coach/core/content/seed_catalog.dart';
 import 'package:aloe_wellness_coach/core/design_system/app_theme.dart';
 import 'package:aloe_wellness_coach/features/auth/domain/auth_models.dart';
-import 'package:aloe_wellness_coach/features/dashboard/presentation/home_dashboard_screen.dart';
 import 'package:aloe_wellness_coach/features/goals/domain/wellness_goal.dart';
 import 'package:aloe_wellness_coach/features/onboarding/domain/onboarding_models.dart';
 import 'package:aloe_wellness_coach/features/plans/domain/plan_models.dart';
 import 'package:aloe_wellness_coach/features/products/domain/product_models.dart';
+import 'package:aloe_wellness_coach/features/products/presentation/products_screen.dart';
 import 'package:aloe_wellness_coach/features/profile/domain/profile_models.dart';
 import 'package:aloe_wellness_coach/features/trackers/domain/tracker_models.dart';
 import 'package:flutter/material.dart';
@@ -14,56 +14,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('dashboard shows check-in and quick actions', (
+  testWidgets('catalog screen keeps key text visible on a narrow phone', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          appControllerProvider.overrideWith(_FakeDashboardController.new),
-        ],
-        child: const MaterialApp(home: HomeDashboardScreen()),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
-    expect(find.text('Сьогоднішній огляд'), findsOneWidget);
-    await tester.scrollUntilVisible(
-      find.text('Оберіть наступний крок'),
-      400,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('Оберіть наступний крок'), findsOneWidget);
-    await tester.scrollUntilVisible(
-      find.text('Рекомендовані продукти'),
-      400,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('Рекомендовані продукти'), findsOneWidget);
-  });
-
-  testWidgets('dashboard hero stays readable on a narrow phone', (
-    WidgetTester tester,
-  ) async {
-    await tester.binding.setSurfaceSize(const Size(360, 780));
+    await tester.binding.setSurfaceSize(const Size(337, 740));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          appControllerProvider.overrideWith(_FakeDashboardController.new),
+          appControllerProvider.overrideWith(_FakeProductsController.new),
         ],
         child: MaterialApp(
           theme: AppTheme.light(),
           home: MediaQuery(
             data: const MediaQueryData(
-              size: Size(360, 780),
+              size: Size(337, 740),
               textScaler: TextScaler.linear(1.1),
             ),
-            child: const HomeDashboardScreen(),
+            child: const ProductsScreen(),
           ),
         ),
       ),
@@ -71,14 +40,14 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.text('СЬОГОДНІ'), findsOneWidget);
-    expect(find.text('День 1 із 14'), findsOneWidget);
-    expect(find.textContaining('Рухайтесь у власному темпі'), findsOneWidget);
+    expect(find.text('Продуктні підказки'), findsOneWidget);
+    expect(find.text('Офіційний shop Aloe Hub'), findsOneWidget);
+    expect(find.text('Відкрити в застосунку'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
 
-class _FakeDashboardController extends AppController {
+class _FakeProductsController extends AppController {
   @override
   Future<AppState> build() async {
     final UserProfile profile = UserProfile(
@@ -99,7 +68,6 @@ class _FakeDashboardController extends AppController {
       startingWeightKg: 68.0,
     );
 
-    final List<Product> recommendations = seedProducts.take(3).toList();
     final WellnessPlan plan = WellnessPlan(
       id: 'plan-14-hydration',
       title: '14-денний план',
@@ -114,17 +82,19 @@ class _FakeDashboardController extends AppController {
           hydrationTask: 'Пийте воду маленькими ковтками протягом дня.',
           wellnessAction: 'Додайте один спокійний прийом їжі без поспіху.',
           journalPrompt: 'Що сьогодні підтримало вас найкраще?',
-          checklist: <ChecklistItem>[
+          checklist: const <ChecklistItem>[
             ChecklistItem(
               id: 'water',
               label: 'Досягти водної цілі дня',
               isCompleted: false,
             ),
           ],
-          suggestedProductIds: <String>['aloe-gel-classic'],
+          suggestedProductIds: const <String>['aloe-vera-gel'],
         ),
       ],
     );
+
+    final List<Product> products = seedProducts.take(12).toList();
 
     return AppState(
       session: AppSession(
@@ -152,12 +122,11 @@ class _FakeDashboardController extends AppController {
         shopBaseUrl: 'https://aloe-hub.flpuretail.com/uk/',
         supportEmail: 'ranskijoo@gmail.com',
         enableAiCoach: false,
-        highlightMessage:
-            'Рухайтесь у власному темпі: вода, сон і спокійний щоденний ритм.',
+        highlightMessage: 'Тримайте власний м’який ритм.',
       ),
       categories: seedCategories,
-      products: seedProducts,
-      recommendedProducts: recommendations,
+      products: products,
+      recommendedProducts: products.take(3).toList(),
       logs: <DailyLog>[
         DailyLog(
           date: DateTime(2026, 3, 28),
@@ -166,7 +135,7 @@ class _FakeDashboardController extends AppController {
           weightKg: 67.8,
           mood: MoodLevel.calm,
           note: 'Спокійний день і хороша вода.',
-          completedChecklistIds: <String>[],
+          completedChecklistIds: const <String>[],
         ),
       ],
       progress: ProgressSnapshot(
@@ -178,7 +147,7 @@ class _FakeDashboardController extends AppController {
             weightKg: 67.8,
             mood: MoodLevel.calm,
             note: 'Спокійний день і хороша вода.',
-            completedChecklistIds: <String>[],
+            completedChecklistIds: const <String>[],
           ),
         ],
         currentStreak: 2,
@@ -194,7 +163,7 @@ class _FakeDashboardController extends AppController {
         weightKg: 67.8,
         mood: MoodLevel.calm,
         note: 'Спокійний день і хороша вода.',
-        completedChecklistIds: <String>[],
+        completedChecklistIds: const <String>[],
       ),
       isOnline: true,
       activePlan: plan,

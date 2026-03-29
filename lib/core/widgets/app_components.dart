@@ -28,18 +28,26 @@ class AppPrimaryButton extends StatelessWidget {
       elevation: onPressed == null ? 0 : 2,
       shadowColor: AloeColors.forest.withValues(alpha: 0.24),
       textStyle: theme.textTheme.labelLarge,
+      minimumSize: const Size.fromHeight(58),
       shape: RoundedRectangleBorder(borderRadius: AloeRadii.md),
     );
-    final Widget child = SizedBox(
-      height: 58,
-      child: icon == null
-          ? FilledButton(onPressed: onPressed, style: style, child: Text(label))
-          : FilledButton.icon(
-              onPressed: onPressed,
-              icon: Icon(icon, size: 18),
-              label: Text(label),
-              style: style,
-            ),
+    final Widget labelWidget = Text(label, textAlign: TextAlign.center);
+    final Widget child = ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 58),
+      child: FilledButton(
+        onPressed: onPressed,
+        style: style,
+        child: icon == null
+            ? labelWidget
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(icon, size: 18),
+                  const SizedBox(width: AloeSpacing.sm),
+                  Flexible(child: labelWidget),
+                ],
+              ),
+      ),
     );
 
     if (!expand) {
@@ -73,22 +81,26 @@ class AppSecondaryButton extends StatelessWidget {
         color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.25),
       ),
       textStyle: theme.textTheme.labelLarge,
+      minimumSize: const Size.fromHeight(56),
       shape: RoundedRectangleBorder(borderRadius: AloeRadii.md),
     );
-    return SizedBox(
-      height: 56,
-      child: icon == null
-          ? OutlinedButton(
-              onPressed: onPressed,
-              style: style,
-              child: Text(label),
-            )
-          : OutlinedButton.icon(
-              onPressed: onPressed,
-              icon: Icon(icon, size: 18),
-              label: Text(label),
-              style: style,
-            ),
+    final Widget labelWidget = Text(label, textAlign: TextAlign.center);
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 56),
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: style,
+        child: icon == null
+            ? labelWidget
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(icon, size: 18),
+                  const SizedBox(width: AloeSpacing.sm),
+                  Flexible(child: labelWidget),
+                ],
+              ),
+      ),
     );
   }
 }
@@ -293,31 +305,42 @@ class WaterRing extends StatelessWidget {
     required this.progress,
     required this.valueLabel,
     required this.caption,
+    this.size = 158,
     super.key,
   });
 
   final double progress;
   final String valueLabel;
   final String caption;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
+    final double innerSize = size * 0.684;
+    final bool compact = size < 150;
+    final TextStyle? valueStyle = (compact
+            ? Theme.of(context).textTheme.titleMedium
+            : Theme.of(context).textTheme.titleLarge)
+        ?.copyWith(fontWeight: FontWeight.w800);
+    final TextStyle? captionStyle = compact
+        ? Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11)
+        : Theme.of(context).textTheme.bodySmall;
     return SizedBox(
-      width: 158,
-      height: 158,
+      width: size,
+      height: size,
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           CustomPaint(
-            size: const Size.square(158),
+            size: Size.square(size),
             painter: _WaterRingPainter(
               progress: progress.clamp(0, 1),
               foreground: Theme.of(context).colorScheme.primary,
             ),
           ),
           Container(
-            width: 108,
-            height: 108,
+            width: innerSize,
+            height: innerSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
@@ -348,15 +371,13 @@ class WaterRing extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     valueLabel,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: valueStyle,
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: AloeSpacing.xs),
+                  SizedBox(height: compact ? 2 : AloeSpacing.xs),
                   Text(
                     caption,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: captionStyle,
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -716,99 +737,140 @@ class GradientHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool dark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      padding: const EdgeInsets.all(AloeSpacing.xxl),
-      constraints: const BoxConstraints(minHeight: 188),
-      decoration: BoxDecoration(
-        borderRadius: AloeRadii.lg,
-        gradient: LinearGradient(
-          colors: dark
-              ? <Color>[
-                  AloeColors.darkElevated.withValues(alpha: 0.96),
-                  AloeColors.darkCard,
-                  AloeColors.forest.withValues(alpha: 0.72),
-                ]
-              : <Color>[
-                  Colors.white.withValues(alpha: 0.92),
-                  AloeColors.dew.withValues(alpha: 0.96),
-                  AloeColors.sand.withValues(alpha: 0.88),
-                ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        border: Border.all(
-          color: dark
-              ? Colors.white.withValues(alpha: 0.08)
-              : AloeColors.forest.withValues(alpha: 0.08),
-        ),
-        boxShadow: AloeShadows.elevated(dark),
-      ),
-      child: ClipRRect(
-        borderRadius: AloeRadii.lg,
-        child: Stack(
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double textScale = MediaQuery.textScalerOf(context).scale(1);
+        final bool compact =
+            constraints.maxWidth < 420 || textScale > 1.05;
+        final EdgeInsetsGeometry padding = EdgeInsets.all(
+          compact ? AloeSpacing.xl : AloeSpacing.xxl,
+        );
+        final TextStyle? titleStyle = compact
+            ? Theme.of(context).textTheme.headlineMedium
+            : Theme.of(context).textTheme.headlineLarge;
+        final Widget textColumn = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Positioned(
-              top: -28,
-              left: -18,
-              child: _AmbientOrb(
-                size: 136,
-                color: dark
-                    ? AloeColors.sage.withValues(alpha: 0.12)
-                    : AloeColors.aloe.withValues(alpha: 0.14),
-              ),
-            ),
-            Positioned(
-              bottom: -52,
-              right: trailing == null ? -14 : 52,
-              child: _AmbientOrb(
-                size: 144,
-                color: dark
-                    ? AloeColors.clay.withValues(alpha: 0.08)
-                    : AloeColors.sand.withValues(alpha: 0.56),
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      if (eyebrow != null) ...<Widget>[
-                        Text(
-                          eyebrow!.toUpperCase(),
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(
-                                letterSpacing: 1.4,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.primary.withValues(alpha: 0.82),
-                              ),
-                        ),
-                        const SizedBox(height: AloeSpacing.sm),
-                      ],
-                      Text(
-                        title,
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                      const SizedBox(height: AloeSpacing.md),
-                      Text(
-                        subtitle,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ],
-                  ),
+            if (eyebrow != null) ...<Widget>[
+              Text(
+                eyebrow!.toUpperCase(),
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  letterSpacing: 1.4,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.82),
                 ),
-                if (trailing != null) ...<Widget>[
-                  const SizedBox(width: AloeSpacing.lg),
-                  trailing!,
-                ],
-              ],
+              ),
+              const SizedBox(height: AloeSpacing.sm),
+            ],
+            Text(title, style: titleStyle),
+            const SizedBox(height: AloeSpacing.md),
+            Text(
+              subtitle,
+              style: compact
+                  ? Theme.of(context).textTheme.bodyMedium
+                  : Theme.of(context).textTheme.bodyLarge,
             ),
           ],
-        ),
-      ),
+        );
+
+        return Container(
+          padding: padding,
+          constraints: BoxConstraints(minHeight: compact ? 0 : 188),
+          decoration: BoxDecoration(
+            borderRadius: AloeRadii.lg,
+            gradient: LinearGradient(
+              colors: dark
+                  ? <Color>[
+                      AloeColors.darkElevated.withValues(alpha: 0.96),
+                      AloeColors.darkCard,
+                      AloeColors.forest.withValues(alpha: 0.72),
+                    ]
+                  : <Color>[
+                      Colors.white.withValues(alpha: 0.92),
+                      AloeColors.dew.withValues(alpha: 0.96),
+                      AloeColors.sand.withValues(alpha: 0.88),
+                    ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            border: Border.all(
+              color: dark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : AloeColors.forest.withValues(alpha: 0.08),
+            ),
+            boxShadow: AloeShadows.elevated(dark),
+          ),
+          child: ClipRRect(
+            borderRadius: AloeRadii.lg,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: <Widget>[
+                Positioned(
+                  top: -28,
+                  left: -18,
+                  child: _AmbientOrb(
+                    size: 136,
+                    color: dark
+                        ? AloeColors.sage.withValues(alpha: 0.12)
+                        : AloeColors.aloe.withValues(alpha: 0.14),
+                  ),
+                ),
+                Positioned(
+                  bottom: -52,
+                  right: trailing == null ? -14 : 52,
+                  child: _AmbientOrb(
+                    size: 144,
+                    color: dark
+                        ? AloeColors.clay.withValues(alpha: 0.08)
+                        : AloeColors.sand.withValues(alpha: 0.56),
+                  ),
+                ),
+                if (compact || trailing == null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      if (trailing != null) ...<Widget>[
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: trailing!,
+                        ),
+                        const SizedBox(height: AloeSpacing.lg),
+                      ],
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 2,
+                          top: 4,
+                          bottom: 4,
+                        ),
+                        child: textColumn,
+                      ),
+                    ],
+                  )
+                else
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                            start: 2,
+                            top: 4,
+                            bottom: 4,
+                          ),
+                          child: textColumn,
+                        ),
+                      ),
+                      const SizedBox(width: AloeSpacing.lg),
+                      trailing!,
+                    ],
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -836,6 +898,9 @@ IconData resolveIcon(String iconKey) => switch (iconKey) {
   'smile' => Icons.sentiment_satisfied_alt_outlined,
   'pack' => Icons.inventory_2_outlined,
   'glow' => Icons.auto_awesome_outlined,
+  'hair' => Icons.content_cut_rounded,
+  'home' => Icons.cleaning_services_outlined,
+  'fragrance' => Icons.local_florist_outlined,
   _ => Icons.eco_outlined,
 };
 
